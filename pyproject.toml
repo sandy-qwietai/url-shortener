@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "url-shortener"
+version = "0.1.0"
+description = "A Simple URL shortener service"
+authors = ["Sandeep Kumar Jha"]
+readme = "README.md"
+packages = [{include = "url_shortener"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.111.0"
+uvicorn = "^0.30.1"
+pydantic = "^2.7.3"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
