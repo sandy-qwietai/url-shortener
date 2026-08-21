@@ -1,0 +1,9 @@
+version: 2
+build_rules:
+  - id: Allow no critical findings
+    finding_types:
+      - vuln
+    severities:
+      - high
+      - critical
+      - low
