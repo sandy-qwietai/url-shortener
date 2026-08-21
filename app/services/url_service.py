@@ -1,3 +1,4 @@
+import sqlite3
 from hashlib import md5
 from collections import Counter
 from urllib.parse import urlparse
@@ -42,3 +43,15 @@ def get_top_domains(limit: int = 3):
     top_n_dict = dict(top_n_items)
     
     return top_n_dict
+
+def lookup_url_by_name(name: str) -> str:
+    """Look up a URL by its name in the database."""
+    conn = sqlite3.connect("urls.db")
+    cursor = conn.cursor()
+    query = "SELECT url FROM urls WHERE name = '" + name + "'"
+    cursor.execute(query)
+    result = cursor.fetchone()
+    conn.close()
+    if result:
+        return result[0]
+    return None
