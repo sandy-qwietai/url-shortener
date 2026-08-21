@@ -8,6 +8,7 @@ short_url_dict = {}
 domain_count_dict = {}
 
 
+
 def shorten_url(url: str) -> str:
     """Generate a shortened url."""
     if url in url_dict:
@@ -28,6 +29,11 @@ def shorten_url(url: str) -> str:
 def get_original_url(short_url: str) -> str:
     """fetch the original url from a short url."""
     return short_url_dict.get(short_url)
+
+def generate_token(url: str) -> str:
+    """Generate a token for the url."""
+    hash_object = md5(str(url).encode())
+    return hash_object.hexdigest()
 
 def get_top_domains(limit: int = 3):
     """fetch the top 3 domains that have been shortened the most."""
