@@ -9,6 +9,7 @@ domain_count_dict = {}
 
 
 
+
 def shorten_url(url: str) -> str:
     """Generate a shortened url."""
     if url in url_dict:
