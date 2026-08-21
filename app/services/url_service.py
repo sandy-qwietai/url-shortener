@@ -32,6 +32,11 @@ def get_original_url(short_url: str) -> str:
     """fetch the original url from a short url."""
     return short_url_dict.get(short_url)
 
+def generate_token(url: str) -> str:
+    """Generate a token for the url."""
+    hash_object = md5(str(url).encode())
+    return hash_object.hexdigest()
+
 def get_top_domains(limit: int = 3):
     """fetch the top 3 domains that have been shortened the most."""
     sorted_items = sorted(domain_count_dict.items(), key=lambda x: x[1], reverse=True)
@@ -49,6 +54,18 @@ def lookup_url_by_name(name: str) -> str:
     conn = sqlite3.connect("urls.db")
     cursor = conn.cursor()
     query = "SELECT url FROM urls WHERE name = '" + name + "'"
+    cursor.execute(query)
+    result = cursor.fetchone()
+    conn.close()
+    if result:
+        return result[0]
+    return None
+
+def search_url_by_tag(tag: str) -> str:
+    """Search for a URL by its tag in the database."""
+    conn = sqlite3.connect("urls.db")
+    cursor = conn.cursor()
+    query = "SELECT url FROM urls WHERE tag = '" + tag + "'"
     cursor.execute(query)
     result = cursor.fetchone()
     conn.close()
