@@ -8,31 +8,21 @@ short_url_dict = {}
 domain_count_dict = {}
 
 def shorten_url(url: str) -> str:
-    """Generate a shortened url using secure methods."""
+    """Generate a shortened url."""
     if url in url_dict:
         return url_dict[url]
-    
-    salt = secrets.token_bytes(16).hex()
-    
-    hash_input = (url + salt + str(time.time_ns())).encode()
-    short_url = hashlib.sha256(hash_input).hexdigest()[:6]
-    
+    # Create a md5 hash of the url provided
+    hash_object = md5(str(url).encode())
+    short_url = hash_object.hexdigest()[:6]
     url_dict[url] = short_url
-    short_url_dict[short_url] = {
-        'url': url,
-        'salt': salt,
-        'hash_method': 'sha256',
-        'created_at': time.time()
-    }
-    
+    short_url_dict[short_url] = url
+    # Increment count of the domain of the url provided
     domain = urlparse(str(url)).netloc
     if domain in domain_count_dict:
         domain_count_dict[domain] = domain_count_dict[domain] + 1
     else:
         domain_count_dict[domain] = 1
-    
     return short_url
-
 
 def get_original_url(short_url: str) -> str:
     """fetch the original url from a short url."""
