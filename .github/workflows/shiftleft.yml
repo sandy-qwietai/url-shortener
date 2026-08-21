@@ -8,9 +8,29 @@ on:
   workflow_dispatch:
 
 jobs:
+  NextGen-Static-Analysis:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Static Analysis
+      run: |
+        chmod a+rx ${GITHUB_WORKSPACE}/sl
+        ${GITHUB_WORKSPACE}/sl --version
+        ${GITHUB_WORKSPACE}/sl analyze --strict --wait \
+          --app url-shortener \
+          --tag branch=${{ github.head_ref }} \
+          --pythonsrc --container 18fgsa/s3-resource $(pwd)
+      env:
+        SHIFTLEFT_ACCESS_TOKEN: ${{ secrets.SHIFTLEFT_ACCESS_TOKEN }}
+        SHIFTLEFT_API_HOST: www.shiftleft.io
+        SHIFTLEFT_GRPC_TELEMETRY_HOST: telemetry.shiftleft.io:443
+        SHIFTLEFT_GRPC_API_HOST: api.shiftleft.io:443
+
   Build-Rules:
     runs-on: ubuntu-latest
     permissions: write-all
+    needs: NextGen-Static-Analysis
     steps:
     - uses: actions/checkout@v3
     - name: Validate Build Rules
